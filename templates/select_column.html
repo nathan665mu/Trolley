@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+{% block title %}Select Column - Trolley Scraper Web{% endblock %}
+{% block content %}
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">2) Select product column</h5>
+      <p class="mb-2">File: <code>{{ filename }}</code> • Rows: {{ total_rows }}</p>
+      <form action="{{ url_for('process') }}" method="post">
+        <input type="hidden" name="job_id" value="{{ job_id }}" />
+        <div class="mb-3">
+          <label for="column" class="form-label">Product name column</label>
+          <select class="form-select" name="column" id="column" required>
+            {% for c in columns %}
+              <option value="{{ c }}">{{ c }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Column samples</label>
+          <ul class="list-group">
+            {% for item in samples %}
+              <li class="list-group-item">
+                <strong>{{ item.name }}</strong>
+                <div class="sample">{{ ", ".join(item.samples) }}</div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <hr />
+        <h6 class="mb-2">3) Processing size</h6>
+        <div class="row g-2 align-items-center mb-3">
+          <div class="col-sm-6">
+            <select class="form-select" name="limit_mode" id="limit_mode">
+              <option value="5" selected>First 5 (Quick test)</option>
+              <option value="10">First 10</option>
+              <option value="50">First 50</option>
+              <option value="all">All (capped to 100 for web run)</option>
+              <option value="custom">Custom…</option>
+            </select>
+          </div>
+          <div class="col-sm-6">
+            <input type="number" class="form-control" name="custom_limit" id="custom_limit" placeholder="Enter custom number" min="1" />
+          </div>
+        </div>
+
+        <button class="btn btn-success" type="submit">Run</button>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Back</a>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const mode = document.getElementById('limit_mode');
+    const custom = document.getElementById('custom_limit');
+    function toggleCustom() {
+      const useCustom = mode.value === 'custom';
+      custom.disabled = !useCustom;
+      custom.required = useCustom;
+    }
+    mode.addEventListener('change', toggleCustom);
+    toggleCustom();
+  </script>
+{% endblock %}

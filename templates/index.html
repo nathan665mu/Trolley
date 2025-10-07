@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block title %}Upload Excel - Trolley Scraper Web{% endblock %}
+{% block content %}
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">1) Upload an Excel file</h5>
+      <p class="text-muted">Accepted formats: .xlsx, .xls</p>
+      <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+          <input class="form-control" type="file" name="file" accept=".xlsx,.xls" required />
+        </div>
+        <button class="btn btn-primary" type="submit">Upload</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

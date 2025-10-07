@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+{% block title %}Results - Trolley Scraper Web{% endblock %}
+{% block content %}
+  <div class="mb-3">
+    <h5 class="mb-1">Results</h5>
+    <div class="text-muted">File: <code>{{ filename }}</code> • Column: <code>{{ column_name }}</code> • Processed: {{ total_processed }}</div>
+  </div>
+
+  {% if tier_counts %}
+    <div class="row g-2 mb-3">
+      {% for tier, count in tier_counts.items() %}
+        <div class="col-auto"><span class="badge text-bg-primary">{{ tier }}: {{ count }}</span></div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="mb-3">
+    <a class="btn btn-outline-primary" href="{{ url_for('download', csv_name=csv_path) }}">Download CSV</a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('index') }}">Start Over</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-sm table-striped align-middle">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>SKU Name</th>
+          <th>Parsed Brand</th>
+          <th>Parsed Size</th>
+          <th>Parsed Qty</th>
+          <th>Match Tier</th>
+          <th>Matched Brand</th>
+          <th>Matched Description</th>
+          <th>Matched Size</th>
+          <th>Matched Qty</th>
+          <th>Price</th>
+          <th>URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in results %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ r.SKU_Name }}</td>
+            <td>{{ r.Parsed_Brand }}</td>
+            <td>{{ r.Parsed_Size }}</td>
+            <td>{{ r.Parsed_Quantity }}</td>
+            <td>{{ r.Match_Tier }}</td>
+            <td>{{ r.Matched_Brand }}</td>
+            <td>{{ r.Matched_Description }}</td>
+            <td>{{ r.Matched_Size }}</td>
+            <td>{{ r.Matched_Quantity }}</td>
+            <td>{{ r.Matched_Price }}</td>
+            <td>
+              {% if r.Matched_URL and r.Matched_URL != 'N/A' %}
+                <a href="{{ r.Matched_URL }}" target="_blank" rel="noopener">Link</a>
+              {% else %}
+                —
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
